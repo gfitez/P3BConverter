@@ -89,6 +89,14 @@ def readFileData(fileName):
     return out
 
 
+def getImg(data):
+    dataType=decodeDataType(data["PIXTYPE"][0])[0]
+
+    image=np.reshape(data["DATA"],(data["DIMY"][0],data["DIMX"][0]))
+    image=image.astype(dataType)
+
+    return image
+
 def showFile(file):
     data=readFileData(file)
     dataType=decodeDataType(data["PIXTYPE"][0])[0]
@@ -104,12 +112,11 @@ if __name__=="__main__":
 
 
 
-    files=glob.glob("220513/bl11__005/*.P3B")
+    files=glob.glob("220513/bl11__011/*.P3B")
     for file in files:
         data=readFileData(file)
-        for key,value in data.items():
-            print(key,str(value)[0:100])
-        showFile(file)
+        image=getImg(data)
+        cv2.imwrite(file[:-4]+".png",image)
     
 
     
